@@ -110,6 +110,14 @@ function createLoadingMessage() {
     return messageDiv;
 }
 
+function renderSource(source) {
+    const text = escapeHtml(source.text);
+    if (source.url && /^https?:\/\//i.test(source.url)) {
+        return `<a href="${escapeHtml(source.url).replace(/"/g, "%22")}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    }
+    return text;
+}
+
 function addMessage(content, type, sources = null, isWelcome = false) {
     const messageId = Date.now();
     const messageDiv = document.createElement('div');
@@ -125,7 +133,7 @@ function addMessage(content, type, sources = null, isWelcome = false) {
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(', ')}</div>
+                <div class="sources-content">${sources.map(renderSource).join(', ')}</div>
             </details>
         `;
     }
